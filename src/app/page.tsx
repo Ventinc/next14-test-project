@@ -16,24 +16,39 @@ export default async function Home() {
           <br />+ <span className="text-lime-400">Drizzle</span>
         </h1>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-green-800/10 p-4 hover:bg-green-800/20"
-            href="/login"
-          >
-            <h3 className="text-2xl font-bold">Login →</h3>
-            <div className="text-lg">
-              Login page - Only if you already have an account
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-green-800/10 p-4 hover:bg-green-800/20"
-            href="/sign-up"
-          >
-            <h3 className="text-2xl font-bold">Sign Up →</h3>
-            <div className="text-lg">
-              Sign Up page - To create an account with lucia-auth and drizzle
-            </div>
-          </Link>
+          {session ? (
+            <Link
+              className="col-span-2 flex max-w-xs flex-col gap-4 rounded-xl bg-green-800/10 p-4 hover:bg-green-800/20"
+              href="/dashboard"
+            >
+              <h3 className="text-2xl font-bold">Dashboard →</h3>
+              <div className="text-lg">
+                App Dashboard - Only if you are logged in
+              </div>
+            </Link>
+          ) : (
+            <>
+              <Link
+                className="flex max-w-xs flex-col gap-4 rounded-xl bg-green-800/10 p-4 hover:bg-green-800/20"
+                href="/login"
+              >
+                <h3 className="text-2xl font-bold">Login →</h3>
+                <div className="text-lg">
+                  Login page - Only if you already have an account
+                </div>
+              </Link>
+              <Link
+                className="flex max-w-xs flex-col gap-4 rounded-xl bg-green-800/10 p-4 hover:bg-green-800/20"
+                href="/sign-up"
+              >
+                <h3 className="text-2xl font-bold">Sign Up →</h3>
+                <div className="text-lg">
+                  Sign Up page - To create an account with lucia-auth and
+                  drizzle
+                </div>
+              </Link>
+            </>
+          )}
         </div>
         <div className="flex flex-col items-center gap-2">
           <p className="text-2xl">

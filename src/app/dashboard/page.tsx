@@ -1,14 +1,11 @@
 "use server";
 
-import { logoutAction } from "~/app/dashboard/actions";
-import { Button } from "~/components/ui/button";
+import { LogoutForm } from "~/app/dashboard/_components/logout-form";
 
 const DashboardPage = () => {
   return (
     <div className="rounded-xl bg-white p-6">
-      <form action={logoutAction}>
-        <Button>Logout</Button>
-      </form>
+      <LogoutForm />
     </div>
   );
 };
