@@ -8,10 +8,10 @@ const LoginPage = async () => {
   if (session) redirect("/dashboard");
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <h1 className="pb-4 text-4xl font-bold text-green-800">Login</h1>
       <LoginForm />
-    </>
+    </div>
   );
 };
 

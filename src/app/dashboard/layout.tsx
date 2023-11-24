@@ -8,12 +8,12 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   if (!session) redirect("/login");
 
   return (
-    <>
-      <h1 className="pb-4 text-4xl font-bold text-green-900">
+    <div className="p-8">
+      <h1 className="px-4 pb-4 text-4xl font-bold text-green-900">
         Dashboard Layout
       </h1>
       {children}
-    </>
+    </div>
   );
 };
 
