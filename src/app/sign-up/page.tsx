@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { SignUpForm } from "~/app/sign-up/_components/signup-form";
-import { getPageSession } from "~/libs/auth";
+import { getPageSession } from "~/lib/auth";
 
 const SignUpPage = async () => {
   const session = await getPageSession();

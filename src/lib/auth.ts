@@ -30,3 +30,11 @@ export const getPageSession = cache(() => {
   const authRequest = auth.handleRequest("GET", context);
   return authRequest.validate();
 });
+
+export const getServerSession = async () => {
+  const authRequest = auth.handleRequest("POST", context);
+
+  const session = await authRequest.validate();
+
+  return session;
+};

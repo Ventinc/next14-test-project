@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getPageSession } from "~/libs/auth";
+import { getPageSession } from "~/lib/auth";
 
 export default async function Home() {
   const session = await getPageSession();

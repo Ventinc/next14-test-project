@@ -1,9 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { auth } from "~/libs/auth";
+import { auth } from "~/lib/auth";
 import * as context from "next/headers";
 import { z } from "zod";
+import { createSafeAction } from "~/lib/create-safe-action";
+import { LuciaError } from "lucia";
 
 const loginInput = z.object({
   email: z
@@ -13,39 +15,36 @@ const loginInput = z.object({
   password: z.string().min(6, "Need to be at least 6 characters"),
 });
 
-export const loginAction = async (_state: object, formData: FormData) => {
-  const input = loginInput.safeParse({
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  });
+export const loginAction = createSafeAction(
+  { schema: loginInput },
+  async (input) => {
+    try {
+      const authHandler = auth.handleRequest("POST", context);
 
-  if (!input.success) {
-    return {
-      status: "error",
-      type: "zod",
-      zodError: input.error.flatten().fieldErrors,
-      message: "An error occured in your form",
-    } as const;
-  }
+      const key = await auth.useKey("username", input.email, input.password);
 
-  const authHandler = auth.handleRequest("POST", context);
+      const session = await auth.createSession({
+        userId: key.userId,
+        attributes: {},
+      });
 
-  const key = await auth.useKey(
-    "username",
-    input.data.email,
-    input.data.password,
-  );
+      authHandler.setSession(session);
 
-  const session = await auth.createSession({
-    userId: key.userId,
-    attributes: {},
-  });
+      revalidatePath("/login");
 
-  authHandler.setSession(session);
+      return {
+        data: { success: true },
+      };
+    } catch (e) {
+      if (e instanceof LuciaError && e.message === "AUTH_INVALID_PASSWORD") {
+        return {
+          error: "Invalid email or password.",
+        };
+      }
 
-  revalidatePath("/login");
-
-  return {
-    status: "success",
-  } as const;
-};
+      return {
+        error: "An error occured, impossible to log into your account.",
+      };
+    }
+  },
+);

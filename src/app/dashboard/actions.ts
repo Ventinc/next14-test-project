@@ -1,19 +1,30 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { auth } from "~/libs/auth";
+import { auth } from "~/lib/auth";
 import * as context from "next/headers";
+import { createSafeAction } from "~/lib/create-safe-action";
+import { z } from "zod";
 
-export const logoutAction = async () => {
-  const authRequest = auth.handleRequest("POST", context);
+export const logoutAction = createSafeAction(
+  { schema: z.object({}) },
+  async () => {
+    const authRequest = auth.handleRequest("POST", context);
 
-  const session = await authRequest.validate();
+    const session = await authRequest.validate();
 
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+    if (!session) {
+      return { error: "Unauthorized" };
+    }
 
-  await auth.invalidateSession(session.sessionId);
-  authRequest.setSession(null);
-  revalidatePath("/dashboard");
-};
+    await auth.invalidateSession(session.sessionId);
+    authRequest.setSession(null);
+    revalidatePath("/dashboard");
+
+    return {
+      data: {
+        logout: true,
+      },
+    };
+  },
+);

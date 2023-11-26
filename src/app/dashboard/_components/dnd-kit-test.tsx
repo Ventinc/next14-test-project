@@ -15,11 +15,10 @@ const Draggable = ({ children, id }: { children: ReactNode; id: string }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
   });
-  const style = transform
-    ? {
-        transform: CSS.Translate.toString(transform),
-      }
-    : undefined;
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
 
   return (
     <div

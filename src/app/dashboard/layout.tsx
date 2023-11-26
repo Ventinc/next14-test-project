@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import React from "react";
-import { getPageSession } from "~/libs/auth";
+import { getPageSession } from "~/lib/auth";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await getPageSession();
